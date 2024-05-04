@@ -1,58 +1,17 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mouse Coordinates</title>
-    <style>
-        #coordinates {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background-color: white;
-            padding: 5px;
-            border: 1px solid black;
-        }
-    </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var coordinatesElement = document.getElementById('coordinates');
-            document.addEventListener('mousemove', function(event) {
-                var x = event.clientX;
-                var y = event.clientY;
-                coordinatesElement.textContent = 'Mouse Coordinates: (' + x + ', ' + y + ')';
-            });
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-            var ws = new WebSocket('ws://localhost:8000/ws/mouse_data/');
-            ws.onopen = function() {
-                console.log('WebSocket connection established.');
-            };
-            ws.onmessage = function(event) {
-                console.log('Message received:', event.data);
-            };
-            document.addEventListener('click', function(event) {
-                if (event.button === 0) {  // Left mouse button
-                    var x = event.clientX;
-                    var y = event.clientY;
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                    ctx.drawImage(document.body, 0, 0, canvas.width, canvas.height);
-                    var imageData = canvas.toDataURL('image/png');
-                    ws.send(JSON.stringify({
-                        event: 'left_click',
-                        x: x,
-                        y: y,
-                        image: imageData
-                    }));
-                }
-            });
-        });
-    </script>
 </head>
 <body>
     <div id="coordinates">Mouse Coordinates: (0, 0)</div>
     <h1>Click anywhere to capture mouse click</h1>
+    <script src="{% static 'js/mouse_play.js' %}"></script>
 </body>
 </html>
