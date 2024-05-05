@@ -1,3 +1,7 @@
+body {
+    background-color: coral;
+}
+
 #coordinates {
     position: fixed;
     top: 10px;
